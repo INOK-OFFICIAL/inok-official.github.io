@@ -9,15 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0066ff;
-            --primary-grad: linear-gradient(135deg, #0052d4 0%, #4364f7 50%, #6fb1fc 100%);
-            --accent: #00f2fe;
-            --bg-light: #0f172a;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glow: 0 0 25px rgba(67, 100, 247, 0.25);
+            --primary: #4364f7;
+            --primary-grad: linear-gradient(135deg, #0052d4 0%, #4364f7 100%);
+            --accent: #2563eb;
+            --bg-light: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --card-bg: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.05);
+            --glow: 0 10px 30px rgba(67, 100, 247, 0.1);
         }
 
         * {
@@ -36,28 +36,26 @@
             min-height: 100vh;
         }
 
-        /* Animated Mesh Gradient Background */
+        /* Ambient Light Background Glows */
         .bg-glow {
             position: fixed;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle at 30% 30%, rgba(67, 100, 247, 0.12) 0%, transparent 40%),
-                        radial-gradient(circle at 70% 60%, rgba(0, 242, 254, 0.1) 0%, transparent 45%),
-                        radial-gradient(circle at 50% 10%, rgba(111, 177, 252, 0.08) 0%, transparent 35%);
+            background: radial-gradient(circle at 15% 15%, rgba(67, 100, 247, 0.05) 0%, transparent 40%),
+                        radial-gradient(circle at 85% 85%, rgba(0, 242, 254, 0.03) 0%, transparent 40%);
             z-index: -1;
-            animation: bgDrift 25s infinite alternate ease-in-out;
+            animation: bgDrift 20s infinite alternate ease-in-out;
         }
 
         @keyframes bgDrift {
             0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(5deg) scale(1.05); }
-            100% { transform: rotate(-5deg) scale(1); }
+            100% { transform: rotate(3deg) scale(1.03); }
         }
 
         .container {
-            max-width: 900px;
+            max-width: 850px;
             margin: 0 auto;
             padding: 60px 20px;
             z-index: 10;
@@ -66,136 +64,114 @@
         /* Header Animations */
         header {
             text-align: center;
-            margin-bottom: 50px;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .logo-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 80px;
-            height: 80px;
-            background: var(--primary-grad);
-            border-radius: 22px;
-            margin-bottom: 25px;
-            box-shadow: var(--glow);
-            position: relative;
-            overflow: hidden;
-            animation: pulseGlow 3s infinite alternate;
-        }
-
-        .logo-badge::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
-            transform: rotate(30deg);
-            animation: shineSweep 4s infinite linear;
-        }
-
-        @keyframes shineSweep {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        @keyframes pulseGlow {
-            0% { transform: scale(1); box-shadow: 0 0 15px rgba(67, 100, 247, 0.2); }
-            100% { transform: scale(1.04); box-shadow: 0 0 30px rgba(0, 242, 254, 0.45); }
-        }
-
-        .logo-icon {
-            color: white;
-            font-size: 2.2rem;
-            font-weight: 800;
-            font-family: 'Outfit', sans-serif;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
-        }
-
-        h1 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 3rem;
-            font-weight: 800;
-            background: linear-gradient(120deg, #ffffff 30%, #a5b4fc 70%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 12px;
-            letter-spacing: -0.03em;
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 1.15rem;
-            font-weight: 400;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-
-        /* Glassmorphism Main Content Panel */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 45px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transform: translateY(40px);
-            animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-            position: relative;
-        }
-
-        .highlight-banner {
-            background: linear-gradient(135deg, rgba(67, 100, 247, 0.15) 0%, rgba(0, 242, 254, 0.05) 100%);
-            border-left: 4px solid var(--accent);
-            border-radius: 14px;
-            padding: 24px;
-            margin-bottom: 40px;
-            font-size: 1.1rem;
-            color: #e2e8f0;
-            border-top: 1px solid rgba(255,255,255,0.03);
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
-            animation: slideRightIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
-            opacity: 0;
-            transform: translateX(-20px);
-        }
-
-        /* Accordion Custom Layout with Micro-Interactions */
-        .section-card {
-            background: rgba(15, 23, 42, 0.4);
-            border: 1px solid rgba(255,255,255,0.04);
-            border-radius: 16px;
-            margin-bottom: 20px;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            overflow: hidden;
+            margin-bottom: 45px;
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .section-card:nth-child(2) { animation-delay: 0.3s; }
-        .section-card:nth-child(3) { animation-delay: 0.4s; }
-        .section-card:nth-child(4) { animation-delay: 0.5s; }
-        .section-card:nth-child(5) { animation-delay: 0.6s; }
-        .section-card:nth-child(6) { animation-delay: 0.7s; }
-        .section-card:nth-child(7) { animation-delay: 0.8s; }
+        /* Logo Holder - Elegant Rounded Style */
+        .logo-container {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 110px;
+            height: 110px;
+            background: #ffffff;
+            border-radius: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .logo-container:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 15px 35px rgba(67, 100, 247, 0.15);
+            border-color: rgba(67, 100, 247, 0.2);
+        }
+
+        .logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(67, 100, 247, 0.08);
+            border: 1px solid rgba(67, 100, 247, 0.15);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Glassmorphism White Card */
+        .main-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.01);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+        }
+
+        .highlight-banner {
+            background: #f1f5f9;
+            border-left: 4px solid var(--primary);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 35px;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Accordion Styling */
+        .section-card {
+            background: #ffffff;
+            border: 1px solid rgba(0,0,0,0.04);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
 
         .section-card:hover {
-            transform: translateY(-4px) scale(1.01);
-            border-color: rgba(67, 100, 247, 0.3);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.25), 0 0 15px rgba(67, 100, 247, 0.1);
-            background: rgba(15, 23, 42, 0.65);
+            transform: translateY(-2px);
+            border-color: rgba(67, 100, 247, 0.2);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+            background: #fafafa;
         }
 
         .section-header {
-            padding: 22px 28px;
+            padding: 20px 24px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -206,12 +182,11 @@
         .section-title {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             font-family: 'Outfit', sans-serif;
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: 600;
-            color: #ffffff;
-            transition: color 0.3s;
+            color: var(--text-main);
         }
 
         .section-card:hover .section-title {
@@ -222,19 +197,19 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.06);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px solid rgba(0,0,0,0.03);
             color: var(--text-muted);
             transition: all 0.3s;
         }
 
         .section-card:hover .icon-wrapper {
-            background: rgba(0, 102, 255, 0.15);
-            border-color: var(--primary);
+            background: rgba(67, 100, 247, 0.1);
             color: var(--accent);
+            border-color: transparent;
         }
 
         .chevron {
@@ -243,8 +218,8 @@
             stroke-width: 2.5;
             stroke-linecap: round;
             stroke-linejoin: round;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             color: var(--text-muted);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -252,47 +227,46 @@
         .section-content {
             max-height: 0;
             opacity: 0;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            padding: 0 28px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 0 24px;
             color: var(--text-muted);
-            font-size: 1.02rem;
+            font-size: 0.98rem;
             border-top: 1px solid transparent;
         }
 
-        /* Active accordion state classes controlled via simple CSS/JS */
+        /* Active State */
         .section-card.active {
-            border-color: rgba(67, 100, 247, 0.45);
-            background: rgba(15, 23, 42, 0.7);
+            border-color: rgba(67, 100, 247, 0.25);
+            background: #ffffff;
+            box-shadow: 0 10px 25px rgba(67, 100, 247, 0.03);
         }
         .section-card.active .section-content {
             max-height: 500px;
             opacity: 1;
-            padding: 24px 28px 28px 28px;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 20px 24px 24px 24px;
+            border-top: 1px solid #f1f5f9;
         }
         .section-card.active .chevron {
             transform: rotate(180deg);
             color: var(--accent);
         }
 
-        /* SVG icon properties */
         .svg-icon {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             fill: currentColor;
         }
 
-        /* Bullet lists design */
         ul {
             list-style: none;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         li {
             position: relative;
-            padding-left: 24px;
-            margin-bottom: 10px;
-            font-size: 0.98rem;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
         }
 
         li::before {
@@ -303,72 +277,43 @@
             font-weight: 800;
         }
 
-        /* Premium Warning Legal Block */
+        /* Disclaimer box */
         .legal-notice {
-            background: linear-gradient(135deg, rgba(245, 159, 0, 0.08) 0%, rgba(245, 159, 0, 0.02) 100%);
+            background: #fffbeb;
             border-left: 4px solid #f59f00;
-            border-radius: 16px;
-            padding: 28px;
-            margin-top: 40px;
-            font-size: 1rem;
-            color: #fbd38d;
-            border-top: 1px solid rgba(245, 159, 0, 0.05);
-            border-bottom: 1px solid rgba(245, 159, 0, 0.05);
-            line-height: 1.8;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 35px;
+            font-size: 0.95rem;
+            color: #78350f;
+            border-top: 1px solid rgba(245, 159, 0, 0.04);
+            border-bottom: 1px solid rgba(245, 159, 0, 0.04);
+            line-height: 1.6;
         }
 
         .legal-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            color: #ffd8a8;
-            margin-bottom: 10px;
+            color: #92400e;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
-        /* Floating Interactive Action Pill */
-        .badge-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 8px 18px;
-            border-radius: 100px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--accent);
-            margin-bottom: 25px;
-            transition: all 0.3s;
-        }
-
-        .badge-pill:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
-            transform: scale(1.02);
-        }
-
-        /* Footer Info */
+        /* Footer */
         footer {
-            margin-top: 60px;
+            margin-top: 50px;
             text-align: center;
             color: var(--text-muted);
-            font-size: 0.95rem;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            padding-top: 30px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+            font-size: 0.9rem;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 25px;
         }
 
         footer p {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .footer-email {
@@ -380,22 +325,14 @@
         }
 
         .footer-email:hover {
-            color: white;
-            border-bottom-color: white;
+            color: var(--text-main);
+            border-bottom-color: var(--text-main);
         }
 
-        /* Global Entrance Animations */
         @keyframes fadeInUp {
             to {
                 opacity: 1;
                 transform: translateY(0);
-            }
-        }
-
-        @keyframes slideRightIn {
-            to {
-                opacity: 1;
-                transform: translateX(0);
             }
         }
     </style>
@@ -407,22 +344,25 @@
     <div class="container">
         
         <header>
-            <div class="logo-badge">
-                <span class="logo-icon">IN</span>
+            <div class="logo-container">
+                <!-- Displays logo.png which you will upload to your GitHub repository -->
+                <img src="logo.png" alt="INOK Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <span class="logo-fallback" style="display:none; font-family:'Outfit',sans-serif; font-size:2rem; font-weight:800; color:#4364f7;">IN</span>
             </div>
+            <br>
             <div class="badge-pill">
-                <span style="display:inline-block; width:8px; height:8px; background:#00f2fe; border-radius:50%; box-shadow:0 0 8px #00f2fe;"></span>
-                100% Offline & Private
+                <span style="display:inline-block; width:6px; height:6px; background:#2563eb; border-radius:50%; box-shadow:0 0 6px #2563eb;"></span>
+                Secure On-Device Utility
             </div>
             <h1>INOK Document Scanner</h1>
             <div class="subtitle">Official Privacy Policy</div>
-            <p style="color: var(--text-muted); margin-top: 15px; font-size: 1.05rem;">Effective Date: July 19, 2026</p>
+            <p style="color: var(--text-muted); margin-top: 10px; font-size: 1rem;">Effective Date: July 19, 2026</p>
         </header>
 
-        <main class="glass-card">
+        <main class="main-card">
             
             <div class="highlight-banner">
-                <strong>Our Core Philosophy:</strong> INOK Document Scanner is designed as an offline-first utility. All scan operations, optical text extraction (OCR), filter rendering, and PDF generations take place <strong>exclusively on your physical device</strong>. We do not transmit, sync, or host your confidential document data on external cloud servers.
+                <strong>Our Core Privacy Commitment:</strong> INOK Document Scanner operates with absolute respect for user security. All image scaling, filters, cropping, optical text extraction (OCR), and PDF/JPEG outputs occur <strong>100% locally on your smartphone</strong>. We never transmit or host your scanned folders, photos, or documents on external servers.
             </div>
 
             <!-- Accordion Section 1: Permissions -->
@@ -430,7 +370,6 @@
                 <div class="section-header" onclick="toggleSection(this)">
                     <div class="section-title">
                         <div class="icon-wrapper">
-                            <!-- Shield Icon -->
                             <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                         </div>
                         1. Device Permissions & Usage
@@ -438,11 +377,11 @@
                     <svg class="chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
                 <div class="section-content">
-                    <p>To deliver advanced document scanning, rotation, and file output services, the App requires standard hardware access permissions. These are managed locally:</p>
+                    <p>To perform core physical-to-digital scanning processes, the application requests the following device permissions:</p>
                     <ul>
-                        <li><strong>Camera Access:</strong> Used solely to capture photos of physical papers to produce scanned documents.</li>
-                        <li><strong>Storage/Media Access:</strong> Used to import custom photos/files from your local gallery and to write your generated PDFs or JPEG files back to your device storage.</li>
-                        <li><strong>Network Access:</strong> Used occasionally to process local Wi-Fi print queues or to transmit anonymous background system crash report logs.</li>
+                        <li><strong>Camera Access:</strong> Necessary to snap pictures of physical documents to generate digital formats.</li>
+                        <li><strong>Storage/Media Access:</strong> Necessary to select files/images from your library for cropping and to save compiled PDFs locally.</li>
+                        <li><strong>Network Access:</strong> Necessary only to queue Wi-Fi document prints or to dispatch anonymous crash statistics.</li>
                     </ul>
                 </div>
             </div>
@@ -452,7 +391,6 @@
                 <div class="section-header" onclick="toggleSection(this)">
                     <div class="section-title">
                         <div class="icon-wrapper">
-                            <!-- Tool/SDK Icon -->
                             <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
                         </div>
                         2. Integrated Third-Party Services
@@ -460,12 +398,12 @@
                     <svg class="chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
                 <div class="section-content">
-                    <p>To maintain high application uptime, deliver fast bug fixes, and facilitate safe monetization paths, the App includes Google-approved service libraries. These may collect anonymous system descriptors:</p>
+                    <p>We use standard Google-verified libraries for app stability and smooth performance. These SDKs may record fully anonymous system IDs:</p>
                     <ul>
-                        <li><strong>Google Play Services:</strong> Runs core security and runtime libraries on Android.</li>
-                        <li><strong>Google AdMob (Optional/Monetization):</strong> Serves non-intrusive advertisements in the free version of the app.</li>
-                        <li><strong>Google Play Billing (Optional/Upgrades):</strong> Manages secured payment interfaces for premium license unlocks.</li>
-                        <li><strong>Firebase Crashlytics:</strong> Records completely anonymous, non-personal runtime logs to isolate system errors.</li>
+                        <li><strong>Google Play Services:</strong> Ensures standard Android security policies.</li>
+                        <li><strong>Google AdMob (Optional):</strong> Displays harmless, relevant developer support ads inside the free tiers.</li>
+                        <li><strong>Google Play Billing (Optional):</strong> Encrypts transactions if purchasing a Premium features license.</li>
+                        <li><strong>Firebase Crashlytics:</strong> Pinpoints app crashes anonymously to push out instant bug solutions.</li>
                     </ul>
                 </div>
             </div>
@@ -475,15 +413,14 @@
                 <div class="section-header" onclick="toggleSection(this)">
                     <div class="section-title">
                         <div class="icon-wrapper">
-                            <!-- Database Icon -->
                             <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 4.02 2 6.5s4.48 4.5 10 4.5 10-2.02 10-4.5S17.52 2 12 2zm0 14c-5.52 0-10-2.02-10-4.5v3.5c0 2.48 4.48 4.5 10 4.5s10-2.02 10-4.5v-3.5c0 2.48-4.48 4.5-10 4.5z"/></svg>
                         </div>
-                        3. Data Deletion & Ownership
+                        3. Data Deletion & Storage
                     </div>
                     <svg class="chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
                 <div class="section-content">
-                    <p>Since all data belongs exclusively to you and resides solely on your local smartphone, <strong>INOK</strong> has no physical or digital access to your document files. Uninstalling the app via standard Android processes will erase the private local directory database. Backup and data preservation are entirely under the user's manual discretion.</p>
+                    <p>All scanned documents and databases are stored physically on your smartphone. We do not have any cloud portal or backend access to view or restore your files. Uninstalling the app completely will clear its private local database; please backup your documents manually before doing so.</p>
                 </div>
             </div>
 
@@ -492,7 +429,6 @@
                 <div class="section-header" onclick="toggleSection(this)">
                     <div class="section-title">
                         <div class="icon-wrapper">
-                            <!-- Smile Icon -->
                             <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
                         </div>
                         4. Children's Privacy Shield
@@ -500,7 +436,7 @@
                     <svg class="chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
                 <div class="section-content">
-                    <p>The App does not target, collect from, or market to children under the age of 13. If you believe we have accidentally received any information associated with a minor, please contact us immediately so we can purge the information from our logs.</p>
+                    <p>The App does not capture personal details or target users under 13 years of age. If you suspect any minor’s registration on our crash servers, notify us for immediate erasure.</p>
                 </div>
             </div>
 
@@ -509,7 +445,6 @@
                 <div class="section-header" onclick="toggleSection(this)">
                     <div class="section-title">
                         <div class="icon-wrapper">
-                            <!-- Globe Icon -->
                             <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                         </div>
                         5. Governing Law & Jurisdiction
@@ -517,39 +452,22 @@
                     <svg class="chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
                 <div class="section-content">
-                    <p>This privacy policy is constructed, interpreted, and governed under the standard legal rules of <strong>India</strong>. Any resolution of dispute arising from the use of this software application shall be exclusively determined within the territorial court limits of India.</p>
-                </div>
-            </div>
-
-            <!-- Accordion Section 6: Updates -->
-            <div class="section-card">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <div class="section-title">
-                        <div class="icon-wrapper">
-                            <!-- Refresh Icon -->
-                            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-                        </div>
-                        6. Policy Modifications
-                    </div>
-                    <svg class="chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-                <div class="section-content">
-                    <p>We reserve the right to modify this Policy periodically to align with evolving Android OS APIs and Play Store privacy updates. We encourage checking this URL regularly to stay updated with standard data policy guidelines.</p>
+                    <p>This Privacy Policy is construed and governed strictly under the legal frameworks of <strong>India</strong>. All claims arising from application usage must be legally determined under the exclusive jurisdiction of the courts of India.</p>
                 </div>
             </div>
 
             <!-- Legal Waiver Block -->
             <div class="legal-notice">
                 <div class="legal-title">
-                    <svg class="svg-icon" style="color:#f59f00;" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    <svg class="svg-icon" style="color:#d97706;" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                     WARRANTY DISCLAIMER & LIMITATION OF LIABILITY
                 </div>
-                The software is provided on an "AS IS" basis without warranty of any kind. INOK makes no warranties concerning the uninterrupted operation or safety of local database structures. Under no circumstances shall INOK, its developers, or affiliates be liable for any direct, indirect, incidental, special, or consequential damages (including loss of data, document corruption, device hardware disruption, or business interruption) arising from the installation or usage of this application.
+                This utility application is provided "AS IS". INOK makes no warranties that the PDF export files are completely free from error or layout glitches. INOK shall not be held liable for any document corruption, storage failure, direct or indirect data losses, or machine issues arising from the download or execution of this app.
             </div>
 
             <footer>
                 <p>&copy; 2026 INOK. All Rights Reserved.</p>
-                <p>For inquiries, support, or privacy notifications: <a href="mailto:inok.admin@gmail.com" class="footer-email">inok.admin@gmail.com</a></p>
+                <p>Support & Legal Contact: <a href="mailto:inok.admin@gmail.com" class="footer-email">inok.admin@gmail.com</a></p>
             </footer>
 
         </main>
@@ -558,11 +476,8 @@
     <script>
         function toggleSection(element) {
             const card = element.parentElement;
-            
-            // Toggle active state on current section
             card.classList.toggle('active');
             
-            // Close other sections for smooth accordion feel
             const allCards = document.querySelectorAll('.section-card');
             allCards.forEach(c => {
                 if (c !== card) {
