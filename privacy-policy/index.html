@@ -118,7 +118,7 @@
             100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
         }
 
-        /* 3D Floating Particle System (Generated via JS) */
+        /* 3D Floating Particle System */
         .particle-3d {
             position: fixed;
             background: linear-gradient(135deg, var(--primary), var(--accent));
@@ -142,7 +142,6 @@
             z-index: 10;
         }
 
-        /* 3D Header Entrance with dynamic letter floats */
         header {
             text-align: center;
             margin-bottom: 60px;
@@ -161,7 +160,6 @@
             display: block;
             margin: 0 auto 25px auto;
             pointer-events: none;
-            transition: transform 0.5s ease;
         }
 
         .logo-fallback-raw {
@@ -174,7 +172,6 @@
             letter-spacing: -0.02em;
         }
 
-        /* Interactive h1 Header Characters (Spans rotated in 3D on hover) */
         h1 {
             font-family: 'Outfit', sans-serif;
             font-size: 3.2rem;
@@ -252,7 +249,6 @@
             transition: all 0.4s ease;
         }
 
-        /* 3D Flip Card Entrances */
         .section-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -392,7 +388,6 @@
             transform-style: preserve-3d;
         }
 
-        /* 3D Magnetic list bullet items */
         li {
             position: relative;
             padding-left: 28px;
@@ -445,7 +440,6 @@
             transform: translateZ(35px);
         }
 
-        /* 3D Interactive Floating Button (Scroll to top) */
         .btn-totop-3d {
             position: fixed;
             bottom: 30px;
@@ -527,6 +521,99 @@
         .anim-group > *:nth-child(5) { animation-delay: 0.5s; }
         .anim-group > *:nth-child(6) { animation-delay: 0.6s; }
         .anim-group > *:nth-child(7) { animation-delay: 0.7s; }
+
+        /* ================= MOBILE & TABLET RESPONSIVE OVERHAUL ================= */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 16px;
+            }
+            header {
+                margin-bottom: 40px;
+            }
+            .logo-img-raw {
+                width: 90px; /* Scaled down logo on phones */
+                margin-bottom: 20px;
+            }
+            h1 {
+                font-size: 2.1rem; /* Highly readable font-scale on mobile, no ugly wraps */
+            }
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            .highlight-banner {
+                padding: 20px 24px;
+                font-size: 1rem;
+                border-radius: 18px;
+                margin-bottom: 30px;
+            }
+            .section-card {
+                padding: 28px 24px; /* Perfectly padded so text is spacious */
+                margin-bottom: 25px;
+                border-radius: 20px;
+            }
+            .section-title {
+                font-size: 1.25rem;
+                gap: 12px;
+                margin-bottom: 18px;
+            }
+            .icon-wrapper {
+                width: 42px;
+                height: 42px;
+                border-radius: 12px;
+            }
+            .svg-icon {
+                width: 18px;
+                height: 18px;
+            }
+            .section-content {
+                font-size: 0.96rem;
+                line-height: 1.75;
+            }
+            li {
+                padding-left: 24px;
+                font-size: 0.95rem;
+            }
+            li:hover {
+                transform: none !important; /* Disable magnetic text slides on touch screens */
+            }
+            .legal-notice {
+                padding: 26px;
+                margin-top: 30px;
+                border-radius: 20px;
+                font-size: 0.95rem;
+            }
+            .legal-title {
+                font-size: 1.15rem;
+                gap: 10px;
+            }
+            /* Downsize rotating 3D cubes so they do not overlap content */
+            .cube-3d-1 { width: 45px; height: 45px; right: 8%; }
+            .cube-3d-2 { width: 30px; height: 30px; left: 6%; }
+            .face-front  { transform: rotateY(0deg) translateZ(15px); }
+            .face-back   { transform: rotateY(180deg) translateZ(15px); }
+            .face-right  { transform: rotateY(90deg) translateZ(15px); }
+            .face-left   { transform: rotateY(-90deg) translateZ(15px); }
+            .face-top    { transform: rotateX(90deg) translateZ(15px); }
+            .face-bottom { transform: rotateX(-90deg) translateZ(15px); }
+            
+            /* Disable heavy hover transformations on touch screen to ensure hyper-fluid page scroll */
+            .interactive-tilt:hover {
+                transform: none !important;
+                box-shadow: var(--shadow-3d) !important;
+                border-color: var(--card-border) !important;
+            }
+            .char-3d:hover {
+                transform: none !important;
+                color: inherit !important;
+                text-shadow: none !important;
+            }
+            .btn-totop-3d {
+                width: 48px;
+                height: 48px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -569,7 +656,6 @@
                 Secure On-Device Utility
             </div>
             <br>
-            <!-- 3D Character Split Heading -->
             <h1 id="heading-3d">INOK Document Scanner</h1>
             <div class="subtitle">Official Privacy Policy</div>
             <p style="color: var(--text-muted); margin-top: 10px; font-size: 1rem;">Effective Date: July 19, 2026</p>
@@ -736,14 +822,17 @@
         const heading3d = document.getElementById('heading-3d');
         const totopBtn = document.getElementById('totop-btn');
 
+        // Check if device is a mobile touch screen
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth <= 768;
+
         // Split h1 heading into 3D individual chars
         if (heading3d) {
             const originalText = heading3d.textContent;
             heading3d.innerHTML = '';
             originalText.split('').forEach(char => {
                 const span = document.createElement('span');
-                span.className = 'char-3d';
-                // Preserve space spacing
+                // Only use 3D text class on non-touch devices
+                span.className = isTouchDevice ? '' : 'char-3d';
                 span.innerHTML = char === ' ' ? '&nbsp;' : char;
                 heading3d.appendChild(span);
             });
@@ -752,22 +841,21 @@
         // Generate 15 extra floating 3D micro particles in different perspective planes
         const cubeWrapper = document.getElementById('cube-wrapper');
         if (cubeWrapper) {
-            for (let i = 0; i < 15; i++) {
+            // Generate particles only if it's a high performance desktop viewport
+            const particleCount = isTouchDevice ? 6 : 15;
+            for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle-3d';
                 
-                // Random size, starting position, and perspective depth plane
-                const size = Math.random() * 12 + 6;
+                const size = Math.random() * (isTouchDevice ? 8 : 12) + 6;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
                 particle.style.left = `${Math.random() * 100}vw`;
                 particle.style.top = `${Math.random() * 100}vh`;
                 
-                // Random depth translation
                 const depth = Math.random() * 160 - 80;
                 particle.style.transform = `translateZ(${depth}px)`;
                 
-                // Stagger animations
                 particle.style.animationDelay = `${Math.random() * 5}s`;
                 particle.style.animationDuration = `${Math.random() * 6 + 6}s`;
                 
@@ -776,39 +864,73 @@
         }
 
         // Apply interactive mouse tracking 3D tilt with deep layer elevation
-        cards.forEach(card => {
-            const shimmer = card.querySelector('.shimmer-glow');
+        if (!isTouchDevice) {
+            cards.forEach(card => {
+                const shimmer = card.querySelector('.shimmer-glow');
 
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
 
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const tiltX = (y - centerY) / centerY * 10;   // High X tilt: 10 degrees
-                const tiltY = -(x - centerX) / centerX * 10;  // High Y tilt: 10 degrees
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const tiltX = (y - centerY) / centerY * 10;
+                    const tiltY = -(x - centerX) / centerX * 10;
 
-                card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.04, 1.04, 1.04) translateZ(30px)`;
-                card.style.boxShadow = `0 40px 80px rgba(67, 100, 247, 0.14), 0 20px 45px rgba(0,0,0,0.06), inset 0 0 0 1px rgba(255,255,255,0.9)`;
-                card.style.borderColor = "rgba(67, 100, 247, 0.3)";
+                    card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.04, 1.04, 1.04) translateZ(30px)`;
+                    card.style.boxShadow = `0 40px 80px rgba(67, 100, 247, 0.14), 0 20px 45px rgba(0,0,0,0.06), inset 0 0 0 1px rgba(255,255,255,0.9)`;
+                    card.style.borderColor = "rgba(67, 100, 247, 0.3)";
 
-                if (shimmer) {
-                    shimmer.style.background = `radial-gradient(circle 380px at ${x}px ${y}px, rgba(67, 100, 247, 0.08) 0%, rgba(147, 51, 234, 0.08) 30%, rgba(255, 255, 255, 0.4) 60%, transparent 100%)`;
-                }
+                    if (shimmer) {
+                        shimmer.style.background = `radial-gradient(circle 380px at ${x}px ${y}px, rgba(67, 100, 247, 0.08) 0%, rgba(147, 51, 234, 0.08) 30%, rgba(255, 255, 255, 0.4) 60%, transparent 100%)`;
+                    }
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1) translateZ(0px)';
+                    card.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02)';
+                    card.style.borderColor = "rgba(255, 255, 255, 0.7)";
+                    if (shimmer) {
+                        shimmer.style.background = `radial-gradient(circle 250px at 0% 0%, rgba(255, 255, 255, 0.45) 0%, transparent 100%)`;
+                    }
+                });
             });
 
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1) translateZ(0px)';
-                card.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02)';
-                card.style.borderColor = "rgba(255, 255, 255, 0.7)";
-                if (shimmer) {
-                    shimmer.style.background = `radial-gradient(circle 250px at 0% 0%, rgba(255, 255, 255, 0.45) 0%, transparent 100%)`;
-                }
+            statics.forEach(stat => {
+                stat.addEventListener('mousemove', (e) => {
+                    const rect = stat.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const tiltX = (y - centerY) / centerY * 4;
+                    const tiltY = -(x - centerX) / centerX * 4;
+                    stat.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02) translateZ(15px)`;
+                });
+                stat.style.mouseleave = () => {
+                    stat.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1) translateZ(0px)';
+                };
             });
-        });
 
-        // 3D Magnetic To-Top Button
+            if (header) {
+                header.addEventListener('mousemove', (e) => {
+                    const rect = header.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const tiltX = (y - centerY) / centerY * 8;
+                    const tiltY = -(x - centerX) / centerX * 8;
+                    header.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+                });
+                header.addEventListener('mouseleave', () => {
+                    header.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
+                });
+            }
+        }
+
+        // To-Top Scroll Button
         window.addEventListener('scroll', () => {
             if (window.scrollY > 300) {
                 totopBtn.classList.add('active');
@@ -821,57 +943,27 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        totopBtn.addEventListener('mousemove', (e) => {
-            const rect = totopBtn.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const tiltX = (y - centerY) / centerY * 15;
-            const tiltY = -(x - centerX) / centerX * 15;
-            totopBtn.style.transform = `scale(1.1) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(30px)`;
-        });
-
-        totopBtn.addEventListener('mouseleave', () => {
-            totopBtn.style.transform = 'scale(1) rotateX(0deg) rotateY(0deg) translateZ(20px)';
-        });
-
-        // Soft 3D static lift for disclaimer/banner elements
-        statics.forEach(stat => {
-            stat.addEventListener('mousemove', (e) => {
-                const rect = stat.getBoundingClientRect();
+        if (!isTouchDevice) {
+            totopBtn.addEventListener('mousemove', (e) => {
+                const rect = totopBtn.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
-                const tiltX = (y - centerY) / centerY * 4;
-                const tiltY = -(x - centerX) / centerX * 4;
-                stat.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02) translateZ(15px)`;
+                const tiltX = (y - centerY) / centerY * 15;
+                const tiltY = -(x - centerX) / centerX * 15;
+                totopBtn.style.transform = `scale(1.1) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(30px)`;
             });
-            stat.addEventListener('mouseleave', () => {
-                stat.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1) translateZ(0px)';
-            });
-        });
 
-        // 3D Header tilt rotation
-        if (header) {
-            header.addEventListener('mousemove', (e) => {
-                const rect = header.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const tiltX = (y - centerY) / centerY * 8;
-                const tiltY = -(x - centerX) / centerX * 8;
-                header.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-            });
-            header.addEventListener('mouseleave', () => {
-                header.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
+            totopBtn.addEventListener('mouseleave', () => {
+                totopBtn.style.transform = 'scale(1) rotateX(0deg) rotateY(0deg) translateZ(20px)';
             });
         }
 
-        // Active Mouse Parallax Depth Effect on background spheres & geometry cubes & particles
+        // Parallax updates for background nodes
         window.addEventListener('mousemove', (e) => {
+            if (isTouchDevice) return; // Save mobile CPU battery & remove layout adjustments
+
             const width = window.innerWidth;
             const height = window.innerHeight;
             const moveX = (e.clientX - width / 2) / width * 40;
@@ -887,7 +979,6 @@
                 gcube2.style.transform = `translate(${-moveX * 1.2}px, ${-moveY * 1.2}px) rotateX(${e.clientX * 0.08}deg) rotateY(${e.clientY * 0.08}deg)`;
             }
 
-            // Move custom floating particles slightly
             const particles = document.querySelectorAll('.particle-3d');
             particles.forEach((p, idx) => {
                 const factor = (idx % 3 + 1) * 0.5;
