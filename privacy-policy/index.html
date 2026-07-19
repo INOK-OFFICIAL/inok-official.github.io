@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Privacy Policy - INOK Document Scanner</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,6 +21,16 @@
             --neon-emerald: rgba(16, 185, 129, 0.2);
         }
 
+        /* Strict overflow prevention to stop mobile viewport zoom-out bugs */
+        html, body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -32,10 +42,8 @@
             background-color: var(--bg-light);
             color: var(--text-main);
             line-height: 1.8;
-            overflow-x: hidden;
-            position: relative;
             min-height: 100vh;
-            perspective: 1600px;
+            -webkit-text-size-adjust: 100%;
         }
 
         /* 3D Parallax Color Blobs */
@@ -46,6 +54,7 @@
             filter: blur(80px);
             pointer-events: none;
             transition: transform 0.3s ease-out;
+            max-width: 100%;
         }
         .orb-1 {
             top: -10%;
@@ -73,16 +82,16 @@
             100% { background: radial-gradient(circle, rgba(239, 68, 68, 0.08) 0%, transparent 80%); }
         }
 
-        /* 3D Geometry Cubes in Background */
         .cube-3d-wrapper {
             position: fixed;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             top: 0;
             left: 0;
             z-index: -1;
             pointer-events: none;
             perspective: 1200px;
+            overflow: hidden;
         }
 
         .cube-3d {
@@ -118,9 +127,8 @@
             100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
         }
 
-        /* 3D Floating Particle System */
         .particle-3d {
-            position: fixed;
+            position: absolute;
             background: linear-gradient(135deg, var(--primary), var(--accent));
             border-radius: 50%;
             pointer-events: none;
@@ -135,23 +143,24 @@
             100% { transform: translateY(-80px) translateZ(50px) rotate(180deg); }
         }
 
+        /* Reduced bottom padding to prevent massive blank spaces */
         .container {
             max-width: 890px;
             margin: 0 auto;
-            padding: 80px 20px;
+            padding: 80px 20px 0px 20px;
             z-index: 10;
+            width: 100%;
         }
 
         header {
             text-align: center;
             margin-bottom: 60px;
-            transform-style: preserve-3d;
             animation: headerEntrance3D 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         @keyframes headerEntrance3D {
-            0% { opacity: 0; transform: translateY(60px) rotateX(-45deg) translateZ(-150px); }
-            100% { opacity: 1; transform: translateY(0) rotateX(0deg) translateZ(0); }
+            0% { opacity: 0; transform: perspective(1000px) translateY(60px) rotateX(-45deg) translateZ(-150px); }
+            100% { opacity: 1; transform: perspective(1000px) translateY(0) rotateX(0deg) translateZ(0); }
         }
 
         .logo-img-raw {
@@ -179,10 +188,9 @@
             color: var(--text-main);
             margin-bottom: 12px;
             letter-spacing: -0.03em;
-            transform-style: preserve-3d;
-            transform: translateZ(50px);
             text-shadow: 0 4px 15px rgba(0,0,0,0.02);
             display: inline-block;
+            max-width: 100%;
         }
 
         .char-3d {
@@ -192,7 +200,7 @@
         }
 
         .char-3d:hover {
-            transform: translateZ(40px) rotateY(20deg) rotateX(-15deg) scale(1.15);
+            transform: perspective(400px) translateZ(40px) rotateY(20deg) rotateX(-15deg) scale(1.15);
             color: var(--primary);
             text-shadow: 0 10px 20px rgba(67, 100, 247, 0.3);
         }
@@ -212,13 +220,12 @@
             text-transform: uppercase;
             letter-spacing: 0.08em;
             box-shadow: 0 15px 30px rgba(67, 100, 247, 0.06), inset 0 0 0 1px rgba(255, 255, 255, 0.9);
-            transform: translateZ(35px);
             animation: badgeFloat 4s infinite alternate ease-in-out;
         }
 
         @keyframes badgeFloat {
-            0% { transform: translateZ(35px) translateY(0); }
-            100% { transform: translateZ(35px) translateY(-5px); }
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-5px); }
         }
 
         .subtitle {
@@ -226,11 +233,11 @@
             font-size: 1.25rem;
             font-weight: 500;
             letter-spacing: 0.02em;
-            transform: translateZ(40px);
         }
 
         main {
-            transform-style: preserve-3d;
+            position: relative;
+            z-index: 10;
         }
 
         .highlight-banner {
@@ -245,7 +252,6 @@
             color: var(--text-main);
             line-height: 1.75;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.03), inset 0 0 0 1px rgba(255,255,255,0.8);
-            transform-style: preserve-3d;
             transition: all 0.4s ease;
         }
 
@@ -385,7 +391,6 @@
             list-style: none;
             margin-top: 15px;
             margin-bottom: 18px;
-            transform-style: preserve-3d;
         }
 
         li {
@@ -393,12 +398,11 @@
             padding-left: 28px;
             margin-bottom: 14px;
             font-size: 1rem;
-            transform: translateZ(5px);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15), color 0.3s;
         }
 
         li:hover {
-            transform: translateZ(15px) translateX(6px);
+            transform: translateX(6px);
             color: var(--text-main);
         }
 
@@ -408,7 +412,6 @@
             left: 0;
             color: var(--accent);
             font-weight: 900;
-            transform: translateZ(5px);
         }
 
         .legal-notice {
@@ -421,10 +424,8 @@
             line-height: 1.75;
             box-shadow: var(--shadow-3d);
             border-top: 1px solid rgba(255,255,255,0.9);
-            transform-style: preserve-3d;
             transition: transform 0.1s ease-out, box-shadow 0.3s ease;
             opacity: 0;
-            transform: translateY(40px) rotateX(-15deg);
             animation: cardEntrance3D 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s forwards;
         }
 
@@ -437,7 +438,6 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            transform: translateZ(35px);
         }
 
         .btn-totop-3d {
@@ -480,14 +480,16 @@
             box-shadow: 0 15px 35px rgba(67, 100, 247, 0.35);
         }
 
+        /* SNUG, COMPACT FOOTER DESIGN TO PREVENT BLANK EMPTY REGIONS */
         footer {
-            margin-top: 70px;
+            margin-top: 35px; /* Shrunk from 70px to 35px */
+            margin-bottom: 0px !important;
+            padding-bottom: 0px !important;
             text-align: center;
             color: var(--text-muted);
-            font-size: 0.98rem;
+            font-size: 0.94rem;
             border-top: 1px solid #e2e8f0;
-            padding-top: 40px;
-            transform-style: preserve-3d;
+            padding-top: 20px; /* Shrunk from 40px to 20px */
             opacity: 0;
             animation: elementFadeIn 1s ease-out 0.8s forwards;
         }
@@ -497,7 +499,11 @@
         }
 
         footer p {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+        }
+
+        footer p:last-child {
+            margin-bottom: 0px !important;
         }
 
         .footer-email {
@@ -524,79 +530,87 @@
 
         /* ================= MOBILE & TABLET RESPONSIVE OVERHAUL ================= */
         @media (max-width: 768px) {
+            html, body {
+                width: 100%;
+                max-width: 100vw;
+                overflow-x: hidden;
+            }
             .container {
-                padding: 40px 16px;
+                padding: 30px 16px 0px 16px; /* Reduced bottom padding on mobile */
+                width: 100%;
+                max-width: 100%;
             }
             header {
-                margin-bottom: 40px;
+                margin-bottom: 35px;
             }
             .logo-img-raw {
-                width: 90px; /* Scaled down logo on phones */
+                width: 90px;
                 margin-bottom: 20px;
             }
             h1 {
-                font-size: 2.1rem; /* Highly readable font-scale on mobile, no ugly wraps */
+                font-size: 1.95rem;
+                word-wrap: break-word;
+                word-break: keep-all;
             }
             .subtitle {
-                font-size: 1.1rem;
+                font-size: 1.05rem;
             }
             .highlight-banner {
-                padding: 20px 24px;
-                font-size: 1rem;
-                border-radius: 18px;
-                margin-bottom: 30px;
+                padding: 18px 20px;
+                font-size: 0.95rem;
+                border-radius: 16px;
+                margin-bottom: 25px;
             }
             .section-card {
-                padding: 28px 24px; /* Perfectly padded so text is spacious */
-                margin-bottom: 25px;
-                border-radius: 20px;
+                padding: 24px 20px;
+                margin-bottom: 20px;
+                border-radius: 18px;
+                max-width: 100%;
             }
             .section-title {
-                font-size: 1.25rem;
-                gap: 12px;
-                margin-bottom: 18px;
-            }
-            .icon-wrapper {
-                width: 42px;
-                height: 42px;
-                border-radius: 12px;
-            }
-            .svg-icon {
-                width: 18px;
-                height: 18px;
-            }
-            .section-content {
-                font-size: 0.96rem;
-                line-height: 1.75;
-            }
-            li {
-                padding-left: 24px;
-                font-size: 0.95rem;
-            }
-            li:hover {
-                transform: none !important; /* Disable magnetic text slides on touch screens */
-            }
-            .legal-notice {
-                padding: 26px;
-                margin-top: 30px;
-                border-radius: 20px;
-                font-size: 0.95rem;
-            }
-            .legal-title {
                 font-size: 1.15rem;
                 gap: 10px;
+                margin-bottom: 15px;
             }
-            /* Downsize rotating 3D cubes so they do not overlap content */
-            .cube-3d-1 { width: 45px; height: 45px; right: 8%; }
-            .cube-3d-2 { width: 30px; height: 30px; left: 6%; }
-            .face-front  { transform: rotateY(0deg) translateZ(15px); }
-            .face-back   { transform: rotateY(180deg) translateZ(15px); }
-            .face-right  { transform: rotateY(90deg) translateZ(15px); }
-            .face-left   { transform: rotateY(-90deg) translateZ(15px); }
-            .face-top    { transform: rotateX(90deg) translateZ(15px); }
-            .face-bottom { transform: rotateX(-90deg) translateZ(15px); }
+            .icon-wrapper {
+                width: 38px;
+                height: 38px;
+                border-radius: 10px;
+            }
+            .svg-icon {
+                width: 16px;
+                height: 16px;
+            }
+            .section-content {
+                font-size: 0.92rem;
+                line-height: 1.7;
+            }
+            li {
+                padding-left: 20px;
+                font-size: 0.92rem;
+            }
+            li:hover {
+                transform: none !important;
+            }
+            .legal-notice {
+                padding: 22px;
+                margin-top: 25px;
+                border-radius: 18px;
+                font-size: 0.92rem;
+            }
+            .legal-title {
+                font-size: 1.05rem;
+                gap: 8px;
+            }
+            .cube-3d-1 { width: 35px; height: 35px; right: 4%; top: 15%; }
+            .cube-3d-2 { width: 25px; height: 30px; left: 4%; bottom: 15%; }
+            .face-front  { transform: rotateY(0deg) translateZ(12px); }
+            .face-back   { transform: rotateY(180deg) translateZ(12px); }
+            .face-right  { transform: rotateY(90deg) translateZ(12px); }
+            .face-left   { transform: rotateY(-90deg) translateZ(12px); }
+            .face-top    { transform: rotateX(90deg) translateZ(12px); }
+            .face-bottom { transform: rotateX(-90deg) translateZ(12px); }
             
-            /* Disable heavy hover transformations on touch screen to ensure hyper-fluid page scroll */
             .interactive-tilt:hover {
                 transform: none !important;
                 box-shadow: var(--shadow-3d) !important;
@@ -608,10 +622,18 @@
                 text-shadow: none !important;
             }
             .btn-totop-3d {
-                width: 48px;
-                height: 48px;
-                bottom: 20px;
-                right: 20px;
+                width: 44px;
+                height: 44px;
+                bottom: 16px;
+                right: 16px;
+            }
+            /* Tightened mobile footer */
+            footer {
+                margin-top: 25px;
+                padding-top: 15px;
+                padding-bottom: 0px !important;
+                margin-bottom: 0px !important;
+                font-size: 0.88rem;
             }
         }
     </style>
@@ -822,7 +844,7 @@
         const heading3d = document.getElementById('heading-3d');
         const totopBtn = document.getElementById('totop-btn');
 
-        // Check if device is a mobile touch screen
+        // Robust mobile touch-device detection
         const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth <= 768;
 
         // Split h1 heading into 3D individual chars
@@ -831,29 +853,28 @@
             heading3d.innerHTML = '';
             originalText.split('').forEach(char => {
                 const span = document.createElement('span');
-                // Only use 3D text class on non-touch devices
                 span.className = isTouchDevice ? '' : 'char-3d';
                 span.innerHTML = char === ' ' ? '&nbsp;' : char;
                 heading3d.appendChild(span);
             });
         }
 
-        // Generate 15 extra floating 3D micro particles in different perspective planes
+        // Generate extra floating 3D micro particles in different perspective planes
         const cubeWrapper = document.getElementById('cube-wrapper');
         if (cubeWrapper) {
-            // Generate particles only if it's a high performance desktop viewport
-            const particleCount = isTouchDevice ? 6 : 15;
+            const particleCount = isTouchDevice ? 5 : 15;
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle-3d';
                 
-                const size = Math.random() * (isTouchDevice ? 8 : 12) + 6;
+                const size = Math.random() * (isTouchDevice ? 6 : 12) + 4;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
-                particle.style.left = `${Math.random() * 100}vw`;
-                particle.style.top = `${Math.random() * 100}vh`;
                 
-                const depth = Math.random() * 160 - 80;
+                particle.style.left = `${Math.random() * (isTouchDevice ? 80 : 90) + 5}%`;
+                particle.style.top = `${Math.random() * (isTouchDevice ? 65 : 80) + 5}%`;
+                
+                const depth = Math.random() * (isTouchDevice ? 60 : 160) - (isTouchDevice ? 30 : 80);
                 particle.style.transform = `translateZ(${depth}px)`;
                 
                 particle.style.animationDelay = `${Math.random() * 5}s`;
@@ -962,7 +983,7 @@
 
         // Parallax updates for background nodes
         window.addEventListener('mousemove', (e) => {
-            if (isTouchDevice) return; // Save mobile CPU battery & remove layout adjustments
+            if (isTouchDevice) return;
 
             const width = window.innerWidth;
             const height = window.innerHeight;
