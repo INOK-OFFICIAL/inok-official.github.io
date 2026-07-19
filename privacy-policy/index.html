@@ -10,14 +10,15 @@
     <style>
         :root {
             --primary: #4364f7;
-            --primary-grad: linear-gradient(135deg, #0052d4 0%, #4364f7 100%);
             --accent: #2563eb;
             --bg-light: #f8fafc;
             --text-main: #0f172a;
             --text-muted: #475569;
-            --card-bg: #ffffff;
-            --card-border: rgba(0, 0, 0, 0.05);
-            --glow: 0 10px 30px rgba(67, 100, 247, 0.1);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-border: rgba(255, 255, 255, 0.7);
+            --neon-blue: rgba(67, 100, 247, 0.2);
+            --neon-purple: rgba(147, 51, 234, 0.2);
+            --neon-emerald: rgba(16, 185, 129, 0.2);
         }
 
         * {
@@ -30,243 +31,380 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-light);
             color: var(--text-main);
-            line-height: 1.7;
+            line-height: 1.8;
             overflow-x: hidden;
             position: relative;
             min-height: 100vh;
+            perspective: 1600px;
         }
 
-        /* Ambient Light Background Glows */
-        .bg-glow {
+        /* 3D Parallax Color Blobs */
+        .bg-3d-element {
             position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 15% 15%, rgba(67, 100, 247, 0.05) 0%, transparent 40%),
-                        radial-gradient(circle at 85% 85%, rgba(0, 242, 254, 0.03) 0%, transparent 40%);
-            z-index: -1;
-            animation: bgDrift 20s infinite alternate ease-in-out;
+            border-radius: 50%;
+            z-index: -2;
+            filter: blur(80px);
+            pointer-events: none;
+            transition: transform 0.3s ease-out;
+        }
+        .orb-1 {
+            top: -10%;
+            left: -10%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(67, 100, 247, 0.12) 0%, transparent 80%);
+            animation: colorShift1 15s infinite alternate ease-in-out;
+        }
+        .orb-2 {
+            bottom: -15%;
+            right: -10%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.1) 0%, transparent 80%);
+            animation: colorShift2 20s infinite alternate ease-in-out;
         }
 
-        @keyframes bgDrift {
-            0% { transform: rotate(0deg) scale(1); }
-            100% { transform: rotate(3deg) scale(1.03); }
+        @keyframes colorShift1 {
+            0% { background: radial-gradient(circle, rgba(67, 100, 247, 0.12) 0%, transparent 80%); }
+            100% { background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 80%); }
+        }
+        @keyframes colorShift2 {
+            0% { background: radial-gradient(circle, rgba(147, 51, 234, 0.1) 0%, transparent 80%); }
+            100% { background: radial-gradient(circle, rgba(239, 68, 68, 0.08) 0%, transparent 80%); }
+        }
+
+        /* 3D Geometry Cubes in Background */
+        .cube-3d-wrapper {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            pointer-events: none;
+            perspective: 1200px;
+        }
+
+        .cube-3d {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            transform-style: preserve-3d;
+            animation: spin3dCube 20s infinite linear;
+            opacity: 0.15;
+            transition: transform 0.3s ease-out;
+        }
+
+        .cube-3d-1 { top: 20%; right: 15%; width: 80px; height: 80px; }
+        .cube-3d-2 { bottom: 25%; left: 10%; width: 50px; height: 50px; animation-duration: 15s; }
+
+        .cube-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 15px rgba(67, 100, 247, 0.15);
+        }
+        .face-front  { transform: rotateY(0deg) translateZ(30px); }
+        .face-back   { transform: rotateY(180deg) translateZ(30px); border-color: #9333ea; }
+        .face-right  { transform: rotateY(90deg) translateZ(30px); border-color: #10b981; }
+        .face-left   { transform: rotateY(-90deg) translateZ(30px); border-color: #f59f00; }
+        .face-top    { transform: rotateX(90deg) translateZ(30px); }
+        .face-bottom { transform: rotateX(-90deg) translateZ(30px); }
+
+        @keyframes spin3dCube {
+            0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+        }
+
+        /* 3D Floating Particle System (Generated via JS) */
+        .particle-3d {
+            position: fixed;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.3;
+            transform-style: preserve-3d;
+            animation: floatingParticles 8s infinite ease-in-out alternate;
+        }
+
+        @keyframes floatingParticles {
+            0% { transform: translateY(0) translateZ(-50px) rotate(0deg); }
+            100% { transform: translateY(-80px) translateZ(50px) rotate(180deg); }
         }
 
         .container {
-            max-width: 850px;
+            max-width: 890px;
             margin: 0 auto;
-            padding: 60px 20px;
+            padding: 80px 20px;
             z-index: 10;
         }
 
-        /* Header Animations */
+        /* 3D Header Entrance with dynamic letter floats */
         header {
             text-align: center;
-            margin-bottom: 45px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            margin-bottom: 60px;
+            transform-style: preserve-3d;
+            animation: headerEntrance3D 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        /* Logo Holder - Elegant Rounded Style */
-        .logo-container {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 110px;
-            height: 110px;
-            background: #ffffff;
-            border-radius: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0,0,0,0.1);
-            border: 1px solid rgba(0, 0, 0, 0.03);
-            overflow: hidden;
-            position: relative;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        @keyframes headerEntrance3D {
+            0% { opacity: 0; transform: translateY(60px) rotateX(-45deg) translateZ(-150px); }
+            100% { opacity: 1; transform: translateY(0) rotateX(0deg) translateZ(0); }
         }
 
-        .logo-container:hover {
-            transform: scale(1.05) rotate(2deg);
-            box-shadow: 0 15px 35px rgba(67, 100, 247, 0.15);
-            border-color: rgba(67, 100, 247, 0.2);
+        .logo-img-raw {
+            width: 120px;
+            height: auto;
+            display: block;
+            margin: 0 auto 25px auto;
+            pointer-events: none;
+            transition: transform 0.5s ease;
         }
 
-        .logo-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .logo-fallback-raw {
+            display: block;
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 25px;
+            letter-spacing: -0.02em;
+        }
+
+        /* Interactive h1 Header Characters (Spans rotated in 3D on hover) */
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            letter-spacing: -0.03em;
+            transform-style: preserve-3d;
+            transform: translateZ(50px);
+            text-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            display: inline-block;
+        }
+
+        .char-3d {
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s;
+            cursor: default;
+        }
+
+        .char-3d:hover {
+            transform: translateZ(40px) rotateY(20deg) rotateX(-15deg) scale(1.15);
+            color: var(--primary);
+            text-shadow: 0 10px 20px rgba(67, 100, 247, 0.3);
         }
 
         .badge-pill {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(67, 100, 247, 0.08);
-            border: 1px solid rgba(67, 100, 247, 0.15);
-            padding: 6px 16px;
+            gap: 10px;
+            background: #ffffff;
+            border: 1px solid rgba(67, 100, 247, 0.18);
+            padding: 10px 24px;
             border-radius: 100px;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 800;
             color: var(--accent);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
+            box-shadow: 0 15px 30px rgba(67, 100, 247, 0.06), inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+            transform: translateZ(35px);
+            animation: badgeFloat 4s infinite alternate ease-in-out;
         }
 
-        h1 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.6rem;
-            font-weight: 800;
-            color: var(--text-main);
-            margin-bottom: 8px;
-            letter-spacing: -0.02em;
+        @keyframes badgeFloat {
+            0% { transform: translateZ(35px) translateY(0); }
+            100% { transform: translateZ(35px) translateY(-5px); }
         }
 
         .subtitle {
             color: var(--text-muted);
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             font-weight: 500;
+            letter-spacing: 0.02em;
+            transform: translateZ(40px);
         }
 
-        /* Glassmorphism White Card */
-        .main-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.01);
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+        main {
+            transform-style: preserve-3d;
         }
 
         .highlight-banner {
-            background: #f1f5f9;
-            border-left: 4px solid var(--primary);
-            border-radius: 12px;
-            padding: 20px 24px;
-            margin-bottom: 35px;
-            font-size: 1.05rem;
-            color: var(--text-muted);
-            line-height: 1.6;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-left: 6px solid var(--primary);
+            border-radius: 24px;
+            padding: 28px 34px;
+            margin-bottom: 45px;
+            font-size: 1.12rem;
+            color: var(--text-main);
+            line-height: 1.75;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.03), inset 0 0 0 1px rgba(255,255,255,0.8);
+            transform-style: preserve-3d;
+            transition: all 0.4s ease;
         }
 
-        /* Accordion Styling */
+        /* 3D Flip Card Entrances */
         .section-card {
-            background: #ffffff;
-            border: 1px solid rgba(0,0,0,0.04);
-            border-radius: 12px;
-            margin-bottom: 16px;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 26px;
+            padding: 42px 48px;
+            margin-bottom: 35px;
+            box-shadow: var(--shadow-3d);
+            position: relative;
             overflow: hidden;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            -webkit-font-smoothing: subpixel-antialiased;
+            transition: transform 0.1s ease-out, box-shadow 0.4s ease, border-color 0.4s ease;
+            cursor: default;
+            opacity: 0;
+            transform: translateY(60px) rotateX(-25deg) scale(0.92);
+            animation: cardEntrance3D 1.1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        .section-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(67, 100, 247, 0.2);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
-            background: #fafafa;
+        @keyframes cardEntrance3D {
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0deg) scale(1);
+            }
         }
 
-        .section-header {
-            padding: 20px 24px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            user-select: none;
+        .shimmer-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            background: radial-gradient(circle 250px at 0% 0%, rgba(255, 255, 255, 0.45) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .section-card:hover .shimmer-glow {
+            opacity: 1;
         }
 
         .section-title {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 18px;
             font-family: 'Outfit', sans-serif;
-            font-size: 1.15rem;
-            font-weight: 600;
+            font-size: 1.45rem;
+            font-weight: 700;
             color: var(--text-main);
+            margin-bottom: 24px;
+            transform: translateZ(50px);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .section-card:hover .section-title {
-            color: var(--accent);
+            transform: translateZ(65px);
         }
 
         .icon-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: #f8fafc;
-            border: 1px solid rgba(0,0,0,0.03);
-            color: var(--text-muted);
-            transition: all 0.3s;
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            background: #ffffff;
+            border: 1px solid rgba(67, 100, 247, 0.12);
+            color: var(--accent);
+            box-shadow: 0 8px 20px rgba(67, 100, 247, 0.05);
+            transition: transform 0.4s ease, background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
         }
 
         .section-card:hover .icon-wrapper {
-            background: rgba(67, 100, 247, 0.1);
-            color: var(--accent);
-            border-color: transparent;
-        }
-
-        .chevron {
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            width: 16px;
-            height: 16px;
-            color: var(--text-muted);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            background-color: var(--primary);
+            color: #ffffff;
+            transform: translateZ(15px) scale(1.08);
+            box-shadow: 0 10px 25px rgba(67, 100, 247, 0.25);
         }
 
         .section-content {
-            max-height: 0;
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            padding: 0 24px;
             color: var(--text-muted);
-            font-size: 0.98rem;
-            border-top: 1px solid transparent;
+            font-size: 1.04rem;
+            line-height: 1.9;
+            transform: translateZ(30px);
+            position: relative;
+            z-index: 2;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Active State */
-        .section-card.active {
-            border-color: rgba(67, 100, 247, 0.25);
-            background: #ffffff;
-            box-shadow: 0 10px 25px rgba(67, 100, 247, 0.03);
+        .section-card:hover .section-content {
+            transform: translateZ(40px);
         }
-        .section-card.active .section-content {
-            max-height: 500px;
-            opacity: 1;
-            padding: 20px 24px 24px 24px;
-            border-top: 1px solid #f1f5f9;
+
+        .section-content p {
+            margin-bottom: 18px;
         }
-        .section-card.active .chevron {
-            transform: rotate(180deg);
-            color: var(--accent);
+
+        .section-content strong {
+            color: var(--text-main);
+            font-weight: 600;
         }
 
         .svg-icon {
-            width: 18px;
-            height: 18px;
+            width: 22px;
+            height: 22px;
             fill: currentColor;
+        }
+
+        .border-glow-accent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #4364f7, #9333ea, #10b981, #4364f7);
+            background-size: 300% 100%;
+            animation: neonGlowFlow 6s infinite linear;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .section-card:hover .border-glow-accent {
+            opacity: 1;
+        }
+
+        @keyframes neonGlowFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
         }
 
         ul {
             list-style: none;
-            margin-top: 8px;
+            margin-top: 15px;
+            margin-bottom: 18px;
+            transform-style: preserve-3d;
         }
 
+        /* 3D Magnetic list bullet items */
         li {
             position: relative;
-            padding-left: 20px;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
+            padding-left: 28px;
+            margin-bottom: 14px;
+            font-size: 1rem;
+            transform: translateZ(5px);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15), color 0.3s;
+        }
+
+        li:hover {
+            transform: translateZ(15px) translateX(6px);
+            color: var(--text-main);
         }
 
         li::before {
@@ -274,195 +412,308 @@
             position: absolute;
             left: 0;
             color: var(--accent);
-            font-weight: 800;
+            font-weight: 900;
+            transform: translateZ(5px);
         }
 
-        /* Disclaimer box */
         .legal-notice {
-            background: #fffbeb;
-            border-left: 4px solid #f59f00;
-            border-radius: 12px;
-            padding: 24px;
-            margin-top: 35px;
-            font-size: 0.95rem;
+            background: linear-gradient(135deg, #fffdf5 0%, #fffbeb 100%);
+            border-left: 6px solid #f59f00;
+            border-radius: 24px;
+            padding: 40px;
+            margin-top: 45px;
             color: #78350f;
-            border-top: 1px solid rgba(245, 159, 0, 0.04);
-            border-bottom: 1px solid rgba(245, 159, 0, 0.04);
-            line-height: 1.6;
+            line-height: 1.75;
+            box-shadow: var(--shadow-3d);
+            border-top: 1px solid rgba(255,255,255,0.9);
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(40px) rotateX(-15deg);
+            animation: cardEntrance3D 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s forwards;
         }
 
         .legal-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
+            font-size: 1.3rem;
+            font-weight: 800;
             color: #92400e;
-            margin-bottom: 8px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            transform: translateZ(35px);
         }
 
-        /* Footer */
+        /* 3D Interactive Floating Button (Scroll to top) */
+        .btn-totop-3d {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 55px;
+            height: 55px;
+            background: #ffffff;
+            border: 1px solid rgba(67, 100, 247, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            box-shadow: 0 10px 25px rgba(67, 100, 247, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            z-index: 999;
+            transform-style: preserve-3d;
+            transform: translateZ(0);
+            transition: transform 0.1s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .btn-totop-3d.active {
+            opacity: 1;
+            pointer-events: auto;
+            animation: scaleInButton 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes scaleInButton {
+            0% { transform: scale(0) translateZ(0); }
+            100% { transform: scale(1) translateZ(20px); }
+        }
+
+        .btn-totop-3d:hover {
+            color: #ffffff;
+            background: var(--primary);
+            box-shadow: 0 15px 35px rgba(67, 100, 247, 0.35);
+        }
+
         footer {
-            margin-top: 50px;
+            margin-top: 70px;
             text-align: center;
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.98rem;
             border-top: 1px solid #e2e8f0;
-            padding-top: 25px;
+            padding-top: 40px;
+            transform-style: preserve-3d;
+            opacity: 0;
+            animation: elementFadeIn 1s ease-out 0.8s forwards;
+        }
+
+        @keyframes elementFadeIn {
+            to { opacity: 1; }
         }
 
         footer p {
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .footer-email {
-            font-weight: 600;
+            font-weight: 700;
             color: var(--accent);
             text-decoration: none;
-            border-bottom: 1px dashed var(--accent);
+            border-bottom: 2px dashed var(--accent);
             transition: all 0.3s;
         }
 
         .footer-email:hover {
             color: var(--text-main);
             border-bottom-color: var(--text-main);
+            padding: 0 4px;
         }
 
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        .anim-group > *:nth-child(1) { animation-delay: 0.1s; }
+        .anim-group > *:nth-child(2) { animation-delay: 0.2s; }
+        .anim-group > *:nth-child(3) { animation-delay: 0.3s; }
+        .anim-group > *:nth-child(4) { animation-delay: 0.4s; }
+        .anim-group > *:nth-child(5) { animation-delay: 0.5s; }
+        .anim-group > *:nth-child(6) { animation-delay: 0.6s; }
+        .anim-group > *:nth-child(7) { animation-delay: 0.7s; }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
+    <div class="bg-3d-element orb-1" id="orb-1"></div>
+    <div class="bg-3d-element orb-2" id="orb-2"></div>
+
+    <div class="cube-3d-wrapper" id="cube-wrapper">
+        <div class="cube-3d cube-3d-1" id="gcube-1">
+            <div class="cube-face face-front"></div>
+            <div class="cube-face face-back"></div>
+            <div class="cube-face face-right"></div>
+            <div class="cube-face face-left"></div>
+            <div class="cube-face face-top"></div>
+            <div class="cube-face face-bottom"></div>
+        </div>
+        <div class="cube-3d cube-3d-2" id="gcube-2">
+            <div class="cube-face face-front"></div>
+            <div class="cube-face face-back"></div>
+            <div class="cube-face face-right"></div>
+            <div class="cube-face face-left"></div>
+            <div class="cube-face face-top"></div>
+            <div class="cube-face face-bottom"></div>
+        </div>
+    </div>
+
+    <!-- 3D Scroll to top floating button -->
+    <div class="btn-totop-3d" id="totop-btn">
+        <svg class="svg-icon" style="width: 20px; height: 20px;" viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
+    </div>
 
     <div class="container">
         
-        <header>
-            <div class="logo-container">
-                <!-- Pointing directly to the root logo location -->
-                <img src="https://inok-official.github.io/logo.png" alt="INOK Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <span class="logo-fallback" style="display:none; font-family:'Outfit',sans-serif; font-size:2rem; font-weight:800; color:#4364f7;">IN</span>
-            </div>
-            <br>
+        <header id="tilt-header">
+            <img src="https://inok-official.github.io/logo.png" alt="INOK Logo" class="logo-img-raw" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <span class="logo-fallback-raw" style="display:none;">INOK</span>
+            
             <div class="badge-pill">
-                <span style="display:inline-block; width:6px; height:6px; background:#2563eb; border-radius:50%; box-shadow:0 0 6px #2563eb;"></span>
+                <span style="display:inline-block; width:6px; height:6px; background:#2563eb; border-radius:50%; box-shadow:0 0 8px rgba(37,99,235,0.6);"></span>
                 Secure On-Device Utility
             </div>
-            <h1>INOK Document Scanner</h1>
+            <br>
+            <!-- 3D Character Split Heading -->
+            <h1 id="heading-3d">INOK Document Scanner</h1>
             <div class="subtitle">Official Privacy Policy</div>
             <p style="color: var(--text-muted); margin-top: 10px; font-size: 1rem;">Effective Date: July 19, 2026</p>
         </header>
 
-        <main class="main-card">
+        <main class="anim-group">
             
-            <div class="highlight-banner">
-                <strong>Our Core Privacy Commitment:</strong> INOK Document Scanner operates with absolute respect for user security. All image scaling, filters, cropping, optical text extraction (OCR), and PDF/JPEG outputs occur <strong>100% locally on your smartphone</strong>. We never transmit or host your scanned folders, photos, or documents on external servers.
+            <div class="highlight-banner static-tilt">
+                <strong>Our Core Privacy Commitment:</strong> INOK Document Scanner operates with absolute respect for user security. All image scaling, filters, cropping, optical character text extraction (OCR), and PDF/JPEG outputs occur <strong>100% locally on your smartphone</strong>. We never transmit, share, or host your scanned folders, physical photos, or documents on external servers.
             </div>
 
-            <!-- Accordion Section 1: Permissions -->
-            <div class="section-card active">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <div class="section-title">
-                        <div class="icon-wrapper">
-                            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                        </div>
-                        1. Device Permissions & Usage
+            <!-- Card Section 1: Overview -->
+            <div class="section-card interactive-tilt">
+                <div class="border-glow-accent"></div>
+                <div class="shimmer-glow"></div>
+                <div class="section-title">
+                    <div class="icon-wrapper">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
                     </div>
-                    <svg class="chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    1. General Overview & Scope
                 </div>
                 <div class="section-content">
-                    <p>To perform core physical-to-digital scanning processes, the application requests the following device permissions:</p>
+                    <p>Welcome to <strong>INOK Document Scanner</strong> (referred to as "the Application", "the App", "We", "Us", or "Our"). This comprehensive Privacy Policy outlines how our application manages, collects, and secures user data. Our primary goal is to ensure a secure environment for your digital documents and to operate in full compliance with the highest standards of international and national privacy laws.</p>
+                    <p>By downloading, installing, and executing INOK Document Scanner, you signify your explicit consent to the terms outlined in this Privacy Policy. If you do not agree with any of the terms or disclaimers provided herein, please uninstall and cease all usage of the application immediately.</p>
+                </div>
+            </div>
+
+            <!-- Card Section 2: Core Processing -->
+            <div class="section-card interactive-tilt">
+                <div class="border-glow-accent"></div>
+                <div class="shimmer-glow"></div>
+                <div class="section-title">
+                    <div class="icon-wrapper">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+                    </div>
+                    2. Localized "On-Device" Document Processing
+                </div>
+                <div class="section-content">
+                    <p>INOK Document Scanner is fundamentally designed to operate as a local standalone utility. This means that all primary functionalities of the app are processed directly on your physical smartphone. No cloud servers are utilized to capture or parse your personal documentation:</p>
                     <ul>
-                        <li><strong>Camera Access:</strong> Necessary to snap pictures of physical documents to generate digital formats.</li>
-                        <li><strong>Storage/Media Access:</strong> Necessary to select files/images from your library for cropping and to save compiled PDFs locally.</li>
-                        <li><strong>Network Access:</strong> Necessary only to queue Wi-Fi document prints or to dispatch anonymous crash statistics.</li>
+                        <li><strong>Image Capture & Cropping:</strong> When you snap pictures of your physical receipts, bills, books, or papers, the scaling, rotating, and corner adjustment algorithms run entirely on your local CPU.</li>
+                        <li><strong>Document Enhancement & Filters:</strong> Adjusting contrast, applying grayscale filters, sharpening text, and brightness scales are processed on-device.</li>
+                        <li><strong>Optical Character Recognition (OCR):</strong> When you extract written text from your scanned files, the OCR engine analyzes the image layout and processes character recognition <strong>100% offline</strong> on your smartphone. The recognized text never leaves your device.</li>
+                        <li><strong>PDF & JPEG Generation:</strong> Compiling multiple images into a final multi-page PDF document or high-quality JPEGs is performed locally using standard native library routines.</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Accordion Section 2: SDKs -->
-            <div class="section-card">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <div class="section-title">
-                        <div class="icon-wrapper">
-                            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                        </div>
-                        2. Integrated Third-Party Services
+            <!-- Card Section 3: Permissions -->
+            <div class="section-card interactive-tilt">
+                <div class="border-glow-accent"></div>
+                <div class="shimmer-glow"></div>
+                <div class="section-title">
+                    <div class="icon-wrapper">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     </div>
-                    <svg class="chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    3. Device Permissions & Specific Usage Intent
                 </div>
                 <div class="section-content">
-                    <p>We use standard Google-verified libraries for app stability and smooth performance. These SDKs may record fully anonymous system IDs:</p>
+                    <p>To enable standard physical-to-digital scanning features, the application must interact with system hardware. We request only the absolute minimum required permissions as detailed below:</p>
                     <ul>
-                        <li><strong>Google Play Services:</strong> Ensures standard Android security policies.</li>
-                        <li><strong>Google AdMob (Optional):</strong> Displays harmless, relevant developer support ads inside the free tiers.</li>
-                        <li><strong>Google Play Billing (Optional):</strong> Encrypts transactions if purchasing a Premium features license.</li>
-                        <li><strong>Firebase Crashlytics:</strong> Pinpoints app crashes anonymously to push out instant bug solutions.</li>
+                        <li><strong>Camera Access (CAMERA):</strong> Required to activate the built-in device camera inside the app, allowing users to capture high-definition photographs of documents to initiate scanning.</li>
+                        <li><strong>Storage & Media Access (READ_EXTERNAL_STORAGE / WRITE_EXTERNAL_STORAGE):</strong> Required to import pre-existing images from your local device gallery for enhancements, and to write or save finalized compiled PDFs directly into your public storage/downloads folder.</li>
+                        <li><strong>Network Connectivity (ACCESS_NETWORK_STATE / INTERNET):</strong> Used solely to support background developer print queries (e.g., sending document files to local Wi-Fi print managers) and to transmit anonymous application telemetry as detailed below.</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Accordion Section 3: Data Safety -->
-            <div class="section-card">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <div class="section-title">
-                        <div class="icon-wrapper">
-                            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 4.02 2 6.5s4.48 4.5 10 4.5 10-2.02 10-4.5S17.52 2 12 2zm0 14c-5.52 0-10-2.02-10-4.5v3.5c0 2.48 4.48 4.5 10 4.5s10-2.02 10-4.5v-3.5c0 2.48-4.48 4.5-10 4.5z"/></svg>
-                        </div>
-                        3. Data Deletion & Storage
+            <!-- Card Section 4: SDKs & Third-Party Integration -->
+            <div class="section-card interactive-tilt">
+                <div class="border-glow-accent"></div>
+                <div class="shimmer-glow"></div>
+                <div class="section-title">
+                    <div class="icon-wrapper">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M4 15h16v-2H4v2zm0 4h16v-2H4v2zm0-8h16V9H4v11zm0-6V4h16v2H4z"/></svg>
                     </div>
-                    <svg class="chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    4. Integrated Third-Party Software & Analytics
                 </div>
                 <div class="section-content">
-                    <p>All scanned documents and databases are stored physically on your smartphone. We do not have any cloud portal or backend access to view or restore your files. Uninstalling the app completely will clear its private local database; please backup your documents manually before doing so.</p>
+                    <p>To optimize stability, monitor layout crashes, and support ongoing developer updates, the Application integrates standard Google-verified software development kits (SDKs). These services may collect fully anonymized device metadata:</p>
+                    <ul>
+                        <li><strong>Google Play Services:</strong> Required to establish base security protocols, handle runtime environment layouts, and verify license configurations.</li>
+                        <li><strong>Firebase Crashlytics:</strong> In the event of an unexpected application crash, an anonymous, system-level trace log is compiled and transmitted to our development team. This report contains only device details (e.g., Android OS version, smartphone model, heap sizes) and contains absolutely no document text, filenames, or user information.</li>
+                        <li><strong>Google AdMob (Optional Tier):</strong> We may serve non-intrusive, relevant advertisements inside free versions of the application. AdMob may utilize unique advertising identifiers (AAID) to deliver personalized ads according to Google's standard ad policy.</li>
+                        <li><strong>Google Play Billing (Optional Purchase):</strong> For users choosing to unlock premium capabilities, billing transactions are handled entirely and securely by the encrypted Google Play Store billing portal. We never store or see your credit card, banking, or direct payment credentials.</li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- Accordion Section 4: Children -->
-            <div class="section-card">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <div class="section-title">
-                        <div class="icon-wrapper">
-                            <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-                        </div>
-                        4. Children's Privacy Shield
+            <!-- Card Section 5: Data Retention -->
+            <div class="section-card interactive-tilt">
+                <div class="border-glow-accent"></div>
+                <div class="shimmer-glow"></div>
+                <div class="section-title">
+                    <div class="icon-wrapper">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
                     </div>
-                    <svg class="chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    5. Data Retention, Backup, & Purge Policy
                 </div>
                 <div class="section-content">
-                    <p>The App does not capture personal details or target users under 13 years of age. If you suspect any minor’s registration on our crash servers, notify us for immediate erasure.</p>
+                    <p>Because INOK Document Scanner operates fully on-device without external server databases, your documentation is completely in your control:</p>
+                    <p><strong>Absolute Storage Limit:</strong> We do not back up, maintain, or synchronize your files in any remote cloud environment. Your scanned folders and saved documents remain securely confined within the private internal sandbox storage directories allocated to the App on your device.</p>
+                    <p><strong>Manual Backups Recommended:</strong> Users are solely responsible for exporting and backing up their valuable documents. If you decide to uninstall INOK Document Scanner or perform a factory reset on your smartphone, all locally cached images, on-device database lists, and settings will be permanently deleted and cannot be restored by our team.</p>
                 </div>
             </div>
 
-            <!-- Accordion Section 5: Governing Law -->
-            <div class="section-card">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <div class="section-title">
-                        <div class="icon-wrapper">
-                            <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                        </div>
-                        5. Governing Law & Jurisdiction
+            <!-- Card Section 6: Children -->
+            <div class="section-card interactive-tilt">
+                <div class="border-glow-accent"></div>
+                <div class="shimmer-glow"></div>
+                <div class="section-title">
+                    <div class="icon-wrapper">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
                     </div>
-                    <svg class="chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    6. Protection of Children's Privacy
                 </div>
                 <div class="section-content">
-                    <p>This Privacy Policy is construed and governed strictly under the legal frameworks of <strong>India</strong>. All claims arising from application usage must be legally determined under the exclusive jurisdiction of the courts of India.</p>
+                    <p>INOK Document Scanner is a general utility scanner and does not target or knowingly collect personal data from children under the age of thirteen (13). If you are a parent or legal guardian and discover that your minor child has transmitted personal information (such as crash telemetry log files), please contact us immediately. We will take prompt steps to verify and delete such information from our systems.</p>
                 </div>
             </div>
 
-            <!-- Legal Waiver Block -->
-            <div class="legal-notice">
+            <!-- Card Section 7: Governing Law -->
+            <div class="section-card interactive-tilt">
+                <div class="border-glow-accent"></div>
+                <div class="shimmer-glow"></div>
+                <div class="section-title">
+                    <div class="icon-wrapper">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><g><rect fill="none" height="24" width="24"/></g><g><path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M12,20c-4.41,0-8-3.59-8-8s3.59-8,8-8s8,3.59,8,8 S16.41,20,12,20z M11,6h2v6h-2V6z M11,14h2v2h-2V14z"/></g></svg>
+                    </div>
+                    7. Governing Law, Dispute Resolution & Jurisdiction
+                </div>
+                <div class="section-content">
+                    <p>This Privacy Policy, its terms, and any legal disputes or obligations arising out of or related to your use of INOK Document Scanner shall be governed by, interpreted, and construed strictly in accordance with the substantive laws of the <strong>Republic of India</strong>, without giving effect to any principles of conflict of laws.</p>
+                    <p>Any legal action, suit, proceeding, or claim arising out of or in connection with the Application must be filed, brought, and decided exclusively within the competent courts located in <strong>India</strong>. You hereby waive any objection to the laying of venue in such courts and irrevocably submit to their exclusive jurisdiction.</p>
+                </div>
+            </div>
+
+            <!-- 3D Disclaimer Card (Lafda Protection) -->
+            <div class="legal-notice static-tilt">
                 <div class="legal-title">
                     <svg class="svg-icon" style="color:#d97706;" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                     WARRANTY DISCLAIMER & LIMITATION OF LIABILITY
                 </div>
-                This utility application is provided "AS IS". INOK makes no warranties that the PDF export files are completely free from error or layout glitches. INOK shall not be held liable for any document corruption, storage failure, direct or indirect data losses, or machine issues arising from the download or execution of this app.
+                This utility application is provided strictly on an "AS IS" and "AS AVAILABLE" basis, without warranties of any kind, either express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, non-infringement, or layout accuracy. INOK does not warrant that the application will be uninterrupted, error-free, or that document compilation and OCR text reading will be completely fault-free. Under no circumstances, including negligence, shall INOK, its founders, or developers be held liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, loss of data, document corruption, storage failure, or machine crash issues) arising out of or in connection with the download, installation, use, or inability to use this app.
             </div>
 
             <footer>
@@ -473,18 +724,176 @@
         </main>
     </div>
 
+    <!-- Active 3D Mouse Tracking Tilt JavaScript Engine -->
     <script>
-        function toggleSection(element) {
-            const card = element.parentElement;
-            card.classList.toggle('active');
-            
-            const allCards = document.querySelectorAll('.section-card');
-            allCards.forEach(c => {
-                if (c !== card) {
-                    c.classList.remove('active');
-                }
+        const cards = document.querySelectorAll('.interactive-tilt');
+        const statics = document.querySelectorAll('.static-tilt');
+        const header = document.getElementById('tilt-header');
+        const orb1 = document.getElementById('orb-1');
+        const orb2 = document.getElementById('orb-2');
+        const gcube1 = document.getElementById('gcube-1');
+        const gcube2 = document.getElementById('gcube-2');
+        const heading3d = document.getElementById('heading-3d');
+        const totopBtn = document.getElementById('totop-btn');
+
+        // Split h1 heading into 3D individual chars
+        if (heading3d) {
+            const originalText = heading3d.textContent;
+            heading3d.innerHTML = '';
+            originalText.split('').forEach(char => {
+                const span = document.createElement('span');
+                span.className = 'char-3d';
+                // Preserve space spacing
+                span.innerHTML = char === ' ' ? '&nbsp;' : char;
+                heading3d.appendChild(span);
             });
         }
+
+        // Generate 15 extra floating 3D micro particles in different perspective planes
+        const cubeWrapper = document.getElementById('cube-wrapper');
+        if (cubeWrapper) {
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle-3d';
+                
+                // Random size, starting position, and perspective depth plane
+                const size = Math.random() * 12 + 6;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                
+                // Random depth translation
+                const depth = Math.random() * 160 - 80;
+                particle.style.transform = `translateZ(${depth}px)`;
+                
+                // Stagger animations
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                particle.style.animationDuration = `${Math.random() * 6 + 6}s`;
+                
+                cubeWrapper.appendChild(particle);
+            }
+        }
+
+        // Apply interactive mouse tracking 3D tilt with deep layer elevation
+        cards.forEach(card => {
+            const shimmer = card.querySelector('.shimmer-glow');
+
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const tiltX = (y - centerY) / centerY * 10;   // High X tilt: 10 degrees
+                const tiltY = -(x - centerX) / centerX * 10;  // High Y tilt: 10 degrees
+
+                card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.04, 1.04, 1.04) translateZ(30px)`;
+                card.style.boxShadow = `0 40px 80px rgba(67, 100, 247, 0.14), 0 20px 45px rgba(0,0,0,0.06), inset 0 0 0 1px rgba(255,255,255,0.9)`;
+                card.style.borderColor = "rgba(67, 100, 247, 0.3)";
+
+                if (shimmer) {
+                    shimmer.style.background = `radial-gradient(circle 380px at ${x}px ${y}px, rgba(67, 100, 247, 0.08) 0%, rgba(147, 51, 234, 0.08) 30%, rgba(255, 255, 255, 0.4) 60%, transparent 100%)`;
+                }
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1) translateZ(0px)';
+                card.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02)';
+                card.style.borderColor = "rgba(255, 255, 255, 0.7)";
+                if (shimmer) {
+                    shimmer.style.background = `radial-gradient(circle 250px at 0% 0%, rgba(255, 255, 255, 0.45) 0%, transparent 100%)`;
+                }
+            });
+        });
+
+        // 3D Magnetic To-Top Button
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                totopBtn.classList.add('active');
+            } else {
+                totopBtn.classList.remove('active');
+            }
+        });
+
+        totopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        totopBtn.addEventListener('mousemove', (e) => {
+            const rect = totopBtn.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const tiltX = (y - centerY) / centerY * 15;
+            const tiltY = -(x - centerX) / centerX * 15;
+            totopBtn.style.transform = `scale(1.1) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(30px)`;
+        });
+
+        totopBtn.addEventListener('mouseleave', () => {
+            totopBtn.style.transform = 'scale(1) rotateX(0deg) rotateY(0deg) translateZ(20px)';
+        });
+
+        // Soft 3D static lift for disclaimer/banner elements
+        statics.forEach(stat => {
+            stat.addEventListener('mousemove', (e) => {
+                const rect = stat.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const tiltX = (y - centerY) / centerY * 4;
+                const tiltY = -(x - centerX) / centerX * 4;
+                stat.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02) translateZ(15px)`;
+            });
+            stat.addEventListener('mouseleave', () => {
+                stat.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1) translateZ(0px)';
+            });
+        });
+
+        // 3D Header tilt rotation
+        if (header) {
+            header.addEventListener('mousemove', (e) => {
+                const rect = header.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const tiltX = (y - centerY) / centerY * 8;
+                const tiltY = -(x - centerX) / centerX * 8;
+                header.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+            });
+            header.addEventListener('mouseleave', () => {
+                header.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
+            });
+        }
+
+        // Active Mouse Parallax Depth Effect on background spheres & geometry cubes & particles
+        window.addEventListener('mousemove', (e) => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const moveX = (e.clientX - width / 2) / width * 40;
+            const moveY = (e.clientY - height / 2) / height * 40;
+
+            if (orb1) orb1.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            if (orb2) orb2.style.transform = `translate(${-moveX}px, ${-moveY}px)`;
+
+            if (gcube1) {
+                gcube1.style.transform = `translate(${moveX * 0.8}px, ${moveY * 0.8}px) rotateX(${e.clientY * 0.1}deg) rotateY(${e.clientX * 0.1}deg)`;
+            }
+            if (gcube2) {
+                gcube2.style.transform = `translate(${-moveX * 1.2}px, ${-moveY * 1.2}px) rotateX(${e.clientX * 0.08}deg) rotateY(${e.clientY * 0.08}deg)`;
+            }
+
+            // Move custom floating particles slightly
+            const particles = document.querySelectorAll('.particle-3d');
+            particles.forEach((p, idx) => {
+                const factor = (idx % 3 + 1) * 0.5;
+                p.style.transform = `translate(${moveX * factor}px, ${moveY * factor}px) translateZ(${idx * 5 - 40}px)`;
+            });
+        });
     </script>
 </body>
 </html>
